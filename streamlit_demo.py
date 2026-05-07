@@ -1,16 +1,22 @@
-import os
 from langchain_openai import ChatOpenAI
 import streamlit as st
 from langchain_core.globals import set_debug
 
-set_debug(True)
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-llm=ChatOpenAI(model="gpt-4o", api_key=OPENAI_API_KEY)
-
 st.title("Ask Anything")
 
-question = st.text_input("Enter the question:")
+with st.sidebar:
+    st.title("Provide your API key")
+    OPENAI_API_KEY = st.text_input("Enter your OpenAI API key",type="password")
+
+if not OPENAI_API_KEY:
+    st.info("Please enter your OpenAI API key to continue")
+    st.stop()
+
+
+
+llm=ChatOpenAI(model="gpt-4o", api_key=OPENAI_API_KEY)
+
+question = st.text_input("Enter the question? ")
 
 if question:
     response = llm.invoke(question)
